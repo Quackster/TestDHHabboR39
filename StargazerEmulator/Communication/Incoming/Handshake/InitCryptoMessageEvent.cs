@@ -16,7 +16,7 @@ public class InitCryptoMessageEvent : IMessageHandler
         client.DiffieHellman =
             new DiffieHellman(new BigInteger(Stargazer.Prime, 16), new BigInteger(Stargazer.Generator, 16));
 
-        var token = DiffieHellman.generateRandomNumString(20);
+        var token = DiffieHellman.generateRandomNumString(24);
 
         client.Token = token;
         client.GenerateTx();

@@ -15,8 +15,6 @@ public class Decoder : ByteToMessageDecoder
         if (!ClientManager.Instance.TryGetClient(context.Channel, out var client) || client == null)
             return;
         
-        Console.WriteLine(Encoding.GetEncoding(0).GetString(input.Array));
-        
         if (input.GetByte(0) == 60 && client.Decoder == null && client.HeaderDecoder == null)
         {
             context.WriteAndFlushAsync(Unpooled.CopiedBuffer(Encoding.UTF8.GetBytes("<?xml version=\"1.0\"?>\r\n" +
@@ -39,21 +37,17 @@ public class Decoder : ByteToMessageDecoder
 
                 while (input.ReadableBytes > 6)
                 {
-                    var tHeaderMsg = new byte[6];
+                    byte[] tHeaderMsg = new byte[6];
                     input.ReadBytes(tHeaderMsg);
 
-                    tHeader = Encoding.GetEncoding(0).GetString(tHeaderMsg);
+                    tHeader = Encoding.Default.GetString(tHeaderMsg);
                     tHeader = client.HeaderDecoder.kg4R6Jo5xjlqtFGs1klMrK4ZTzb3R(tHeader);
 
-                    var tByte1 = tHeader[3] & 63;
-                    var tByte2 = tHeader[2] & 63;
-                    var tByte3 = tHeader[1] & 63;
+                    int tByte1 = ((int)tHeader[3]) & 63;
+                    int tByte2 = ((int)tHeader[2]) & 63;
+                    int tByte3 = ((int)tHeader[1]) & 63;
                     pMsgSize = (tByte2 * 64) | tByte1;
                     pMsgSize = (tByte3 * 64 * 64) | pMsgSize;
-
-                    int tx = iterateRandom(client.Ptx);
-
-                    Console.WriteLine("Msg size: {0}", pMsgSize);
 
                     if (input.ReadableBytes < pMsgSize)
                     {
@@ -61,14 +55,14 @@ public class Decoder : ByteToMessageDecoder
                         return;
                     }
 
-                    var tBodyMsg = new byte[pMsgSize];
+                    client.Ptx = IterateRandom(client.Ptx);
+
+                    byte[] tBodyMsg = new byte[pMsgSize];
                     input.ReadBytes(tBodyMsg);
 
-                    tBody = Encoding.GetEncoding(0).GetString(tBodyMsg);
+                    tBody = Encoding.Default.GetString(tBodyMsg);
                     tBody = client.Decoder.kg4R6Jo5xjlqtFGs1klMrK4ZTzb3R(tBody);
-                    tBody = removePadding(tBody, tx % 5);
-                    
-                    Console.WriteLine("Body: {0}", tBody);
+                    tBody = removePadding(tBody, client.Ptx % 5);
                     output.Add(new ClientPacket(Unpooled.CopiedBuffer(Encoding.GetEncoding(0).GetBytes(tBody))));
                 }
             }
@@ -88,12 +82,16 @@ public class Decoder : ByteToMessageDecoder
     }
     
     
-    public static String removePadding(String tBody, int i)
+    public static int IterateRandom(int tSeed)
     {
-        return i >= tBody.Length ? tBody : tBody[i..];
-    }
-    
-    public static int iterateRandom(int tSeed) {
         return ((19979 * tSeed) + 5) % 65536;
     }
+    
+    public static String removePadding(String tBody, int i) {
+        if (i >= tBody.Length)
+            return tBody;
+
+        return tBody.Substring(i);
+    }
+
 }

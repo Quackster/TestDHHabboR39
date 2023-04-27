@@ -22,46 +22,45 @@ public class Client
 
     public void GenerateTx()
     {
-        var tSeedHex = Token[^4..];
-        var tVals = new Dictionary<string,int>
-        {
-            { "0", 0 },
-            { "1", 1 },
-            { "2", 2 },
-            { "3", 3 },
-            { "4", 4 },
-            { "5", 5 },
-            { "6", 6 },
-            { "7", 7 },
-            { "8", 8 },
-            { "9", 9 },
-            { "a", 10 },
-            { "b", 11 },
-            { "c", 12 },
-            { "d", 13 },
-            { "e", 14 },
-            { "f", 15 },
-            { "A", 10 },
-            { "B", 11 },
-            { "C", 12 },
-            { "D", 13 },
-            { "E", 14 },
-            { "F", 15 }
-        };
+        string tSeedHex = Token.Substring(Token.Length - 4);
+        Dictionary<string, int> tVals = new Dictionary<string, int>();
+        tVals.Add("0", 0);
+        tVals.Add("1", 1);
+        tVals.Add("2", 2);
+        tVals.Add("3", 3);
+        tVals.Add("4", 4);
+        tVals.Add("5", 5);
+        tVals.Add("6", 6);
+        tVals.Add("7", 7);
+        tVals.Add("8", 8);
+        tVals.Add("9", 9);
+        tVals.Add("a", 10);
+        tVals.Add("b", 11);
+        tVals.Add("c", 12);
+        tVals.Add("d", 13);
+        tVals.Add("e", 14);
+        tVals.Add("f", 15);
+        tVals.Add("A", 10);
+        tVals.Add("B", 11);
+        tVals.Add("C", 12);
+        tVals.Add("D", 13);
+        tVals.Add("E", 14);
+        tVals.Add("F", 15);
 
-        Ptx = 0;
+        this.Ptx = 0;
 
-        for (var i = 0; i <= 3; i++)
+        for (int i = 0; i <= 3; i++)
         {
-            Ptx += (int)(Math.Pow(16, i) * tVals[char.ToString(tSeedHex[3 - i])]);
+            this.Ptx += (int)(Math.Pow(16, i) * tVals[Char.ToString(tSeedHex[3 - i])]);
         }
 
-        Prx = 0;
+        this.Prx = 0;
 
-        tSeedHex = Token[..4];
+        tSeedHex = Token.Substring(0, 4);
 
-        for (var i = 0; i <= 3; i++) {
-            Prx += (int)(Math.Pow(16, i) * tVals[char.ToString(tSeedHex[3 - i])]);
+        for (int i = 0; i <= 3; i++)
+        {
+            this.Prx += (int)(Math.Pow(16, i) * tVals[Char.ToString(tSeedHex[3 - i])]);
         }
     }
 
