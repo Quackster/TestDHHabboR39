@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Stargazer</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="BouncyCastle.Cryptography" Version="2.2.1" />
+      <PackageReference Include="DotNetty.Codecs" Version="0.7.5" />
+      <PackageReference Include="DotNetty.Common" Version="0.7.5" />
+      <PackageReference Include="DotNetty.Transport" Version="0.7.5" />
+      <PackageReference Include="HabboEncoding" Version="2.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0-preview.3.23174.8" />
+      <PackageReference Include="YamlDotNet" Version="13.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="server_config.yaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="HabboHotel" />
+    </ItemGroup>
+
+</Project>

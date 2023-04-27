@@ -1,0 +1,5 @@
+﻿Database:
+  Hostname: localhost
+Network:
+  Game:
+    Port: 30000
