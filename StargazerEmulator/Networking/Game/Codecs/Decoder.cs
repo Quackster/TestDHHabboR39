@@ -37,6 +37,7 @@ public class Decoder : ByteToMessageDecoder
 
                 while (input.ReadableBytes > 6)
                 {
+                    Console.WriteLine("Input byte count: " + input.ReadableBytes);
                     byte[] tHeaderMsg = new byte[6];
                     input.ReadBytes(tHeaderMsg);
 
@@ -63,6 +64,8 @@ public class Decoder : ByteToMessageDecoder
                     tBody = Encoding.Default.GetString(tBodyMsg);
                     tBody = client.Decoder.kg4R6Jo5xjlqtFGs1klMrK4ZTzb3R(tBody);
                     tBody = removePadding(tBody, client.Ptx % 5);
+                    var pkt = new ClientPacket(Unpooled.CopiedBuffer(Encoding.GetEncoding(0).GetBytes(tBody)));
+                    Console.WriteLine("Packet header " + pkt.ReadBase64() + " " + tBody);
                     output.Add(new ClientPacket(Unpooled.CopiedBuffer(Encoding.GetEncoding(0).GetBytes(tBody))));
                 }
             }

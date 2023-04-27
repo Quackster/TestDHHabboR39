@@ -43,11 +43,12 @@ public class GameNetworkHandler : SimpleChannelInboundHandler<ClientPacket>
 
         if (MessageHandlerManager.Instance.TryGetHandler(header, out var handler) && handler != null)
         {
+            Console.WriteLine("Invoked " + handler.GetType().Name);
             await handler.Handle(client, msg);
         }
         else
         {
-            _logger.LogWarning("Unregistered Message Handler for ID {Header} - {Body}", header, msg.ToString());
+            // _logger.LogWarning("Unregistered Message Handler for ID {Header} - {Body}", header, msg.ToString());
         }
     }
 
